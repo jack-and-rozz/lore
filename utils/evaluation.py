@@ -1,5 +1,5 @@
 #coding: utf-8
-from core.utils import common
+from occult.utils import common
 import numpy as np
 
 from nltk.translate.bleu_score import sentence_bleu, SmoothingFunction

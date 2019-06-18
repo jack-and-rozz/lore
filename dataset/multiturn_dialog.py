@@ -3,10 +3,10 @@ import os, re, sys, random, copy, time
 import numpy as np
 from nltk import word_tokenize
 
-from core.dataset.base import padding as _padding, PartitionedDatasetBase, DatasetBase
-from core.utils.common import dotDict, recDotDefaultDict, recDotDict, flatten, flatten_recdict, batching_dicts, dbgprint, read_jsonlines, timewatch, separate_path_and_filename
-from core.utils import evaluation as eval_util
-from core.vocabulary.base import WordVocabularyFromList
+from occult.dataset.base import padding as _padding, PartitionedDatasetBase, DatasetBase
+from occult.utils.common import dotDict, recDotDefaultDict, recDotDict, flatten, flatten_recdict, batching_dicts, dbgprint, read_jsonlines, timewatch, separate_path_and_filename
+from occult.utils import evaluation as eval_util
+from occult.vocabulary.base import WordVocabularyFromList
 
 EOT = '__eot__'
 EOU = '__eou__'

@@ -3,10 +3,10 @@ import sys
 import numpy as np
 from pprint import pprint
 import tensorflow as tf
-from core.models.base import ModelBase
-from core.utils.tf_utils import shape, linear, make_summary
-from core.utils.common import dbgprint, dotDict, recDotDefaultDict, flatten, flatten_batch, flatten_recdict
-#from core.models.seq2seq.evaluation import evaluate, summarize_test_results
+from occult.models.base import ModelBase
+from occult.utils.tf_utils import shape, linear, make_summary
+from occult.utils.common import dbgprint, dotDict, recDotDefaultDict, flatten, flatten_batch, flatten_recdict
+#from occult.models.seq2seq.evaluation import evaluate, summarize_test_results
 
 class Seq2SeqBase(ModelBase):
   def __init__(self, sess, config, trainer, vocab):

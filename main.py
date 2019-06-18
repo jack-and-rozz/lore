@@ -7,16 +7,14 @@ sys.path.append(os.getcwd())
 import numpy as np
 import tensorflow as tf
 
-from lore.utils.common import dbgprint, dotDict, recDotDict, recDotDefaultDict, flatten, flatten_batch, flatten_recdict, timewatch, str2bool, logManager, get_config, print_config
-import lore.dataset as data_libs
-import lore.vocabulary as vocab_libs
-import lore.trainers as trainer_libs
+from occult.utils.common import dbgprint, dotDict, recDotDict, recDotDefaultDict, flatten, flatten_batch, flatten_recdict, timewatch, str2bool, logManager, get_config, print_config
+import occult.dataset as data_libs
+import occult.vocabulary as vocab_libs
+import occult.trainers as trainer_libs
 
 random.seed(0)
 np.random.seed(0)
 
-
-exit(1)
 
 BEST_CHECKPOINT_NAME = 'model.ckpt.best'
 def get_logger(logfile_path=None):
@@ -238,9 +236,9 @@ class ManagerBase(object):
       save_as_best = False
 
       task_model = list(m.tasks.values())[0]
-      if valid_score >= task_model.max_score.eval():
+      if valid_score >= task_model.max_soccult.eval():
         save_as_best = True
-        self.logger.info("Epoch %d (valid): %s max score update (%.3f->%.3f): " % (m.epoch.eval(), task_name, task_model.max_score.eval(), valid_score))
+        self.logger.info("Epoch %d (valid): %s max score update (%.3f->%.3f): " % (m.epoch.eval(), task_name, task_model.max_soccult.eval(), valid_score))
         task_model.update_max_score(valid_score)
 
       t = time.time()
@@ -314,9 +312,9 @@ class ManagerBase(object):
       self.summary_writer.add_summary(valid_summary, m.epoch.eval())
     
       # Use evaluation metrics for validation?
-      # if valid_score >= task_model.max_score.eval():
+      # if valid_score >= task_model.max_soccult.eval():
       #   save_as_best[i] = True
-      #   self.logger.info("Epoch %d (valid): %s max score update (%.3f->%.3f): " % (m.epoch.eval(), task_name, task_model.max_score.eval(), valid_score))
+      #   self.logger.info("Epoch %d (valid): %s max score update (%.3f->%.3f): " % (m.epoch.eval(), task_name, task_model.max_soccult.eval(), valid_score))
       #   task_model.update_max_score(valid_score)
 
     # mode = 'test'

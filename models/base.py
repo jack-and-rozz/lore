@@ -2,7 +2,7 @@
 from collections import defaultdict
 import tensorflow as tf
 from tensorflow.python.ops.rnn_cell import DropoutWrapper, ResidualWrapper
-from core.vocabulary.embeddings import initialize_embeddings
+from occult.vocabulary.embeddings import initialize_embeddings
 
 def setup_cell(cell_type, size, use_residual=False, 
                keep_prob=None, activation=None):

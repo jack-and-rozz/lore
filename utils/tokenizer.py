@@ -1,6 +1,6 @@
 # coding: utf-8
 import json
-from core.utils.common import flatten
+from occult.utils.common import flatten
 #############################################
 #        CoreNLP
 #############################################
@@ -55,7 +55,7 @@ def load_sentencepiece(model_path):
 def setup_tokenizer(tokenizer_type=None, tokenizer_path=None):
   assert tokenizer_type is None or tokenizer_type in ['corenlp', 'nltk', 'sentencepiece']
   if tokenizer_type == 'corenlp':
-    #from core.utils.tokenizer import connect_to_corenlp_server, run_corenlp
+    #from occult.utils.tokenizer import connect_to_corenlp_server, run_corenlp
     corenlp = connect_to_corenlp_server(host='http://localhost', port=9000)
     tokenizer = lambda uttr: flatten(run_corenlp(uttr, corenlp))
   elif tokenizer_type == 'nltk':

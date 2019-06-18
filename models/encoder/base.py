@@ -8,10 +8,10 @@ from tensorflow.python.util import nest
 from tensorflow.python.ops import rnn
 from tensorflow.contrib.rnn import LSTMStateTuple
 
-from core.utils.common import dbgprint, dotDict
-from core.utils.tf_utils import shape, cnn, linear, projection, batch_gather, batch_loop 
-from core.models.base import setup_cell, initialize_embeddings
-from core.vocabulary.base import VocabularyWithEmbedding
+from occult.utils.common import dbgprint, dotDict
+from occult.utils.tf_utils import shape, cnn, linear, projection, batch_gather, batch_loop 
+from occult.models.base import setup_cell, initialize_embeddings
+from occult.vocabulary.base import VocabularyWithEmbedding
 
 def project_state(state, output_size, activation=None):
   with tf.name_scope(sys._getframe().f_code.co_name):

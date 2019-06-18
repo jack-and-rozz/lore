@@ -2,7 +2,7 @@
 import shutil
 import tensorflow as tf
 from tensorflow.python.client import device_lib
-from core.utils.common import dbgprint
+from occult.utils.common import dbgprint
 import sys
 
 def get_available_gpus():

@@ -4,12 +4,12 @@ from pprint import pprint
 import numpy as np
 import tensorflow as tf
 
-from core.utils.tf_utils import make_summary, assign_device, get_available_gpus
-from core.utils.common import dbgprint, dotDict, flatten_recdict
-from core.trainers.base import TrainerBase, average_gradients
-from core.models.adversarial import AdversarialBase
-import core.models 
-from core.trainers.multi_gpu import MultiModelWrapper
+from occult.utils.tf_utils import make_summary, assign_device, get_available_gpus
+from occult.utils.common import dbgprint, dotDict, flatten_recdict
+from occult.trainers.base import TrainerBase, average_gradients
+from occult.models.adversarial import AdversarialBase
+import occult.models 
+from occult.trainers.multi_gpu import MultiModelWrapper
 
 ##############################
 ##      MTL Manager
@@ -36,7 +36,7 @@ class MTLTrainerBase(TrainerBase):
       sys.stdout.write('Building %s model to %s...\n' % (task_name, device))
       with tf.variable_scope(task_name, reuse=tf.AUTO_REUSE) as scope:
         with tf.device(device):
-          task_class = getattr(core.models, task_config.model_type)
+          task_class = getattr(occult.models, task_config.model_type)
           args = [sess, task_config, self, self.vocab]
           if issubclass(task_class, AdversarialBase):
             other_models = [t for t in tasks.values() 
@@ -181,7 +181,7 @@ class MTLonMultiGPU(GradientSum):
         sys.stdout.write('Building %s model to %s...\n' % (task_name, device))
         with tf.variable_scope(task_name, reuse=tf.AUTO_REUSE) as scope:
           with tf.device(device):
-            task_class = getattr(core.models, task_config.model_type)
+            task_class = getattr(occult.models, task_config.model_type)
             args = [sess, task_config, self, self.vocab]
             if issubclass(task_class, AdversarialBase):
               other_models = [t.models[gpu_idx] for t in tasks.values() if not isinstance(t.models[gpu_idx], AdversarialBase)]

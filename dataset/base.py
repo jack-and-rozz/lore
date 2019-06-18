@@ -5,8 +5,8 @@ import numpy as np
 from pprint import pprint
 from nltk import word_tokenize
 from collections import OrderedDict, defaultdict
-from core.utils.common import dotDict, recDotDefaultDict, recDotDict, flatten, batching_dicts, dbgprint, read_jsonlines
-#from core.vocabulary.base import PAD_ID
+from occult.utils.common import dotDict, recDotDefaultDict, recDotDict, flatten, batching_dicts, dbgprint, read_jsonlines
+#from occult.vocabulary.base import PAD_ID
 PAD_ID = 0
 
 def partial_shuffle(data, chunk_size=10000):
@@ -26,7 +26,7 @@ class PartitionedDatasetBase(object):
     Args:
     - config: A hierarchical dict containing shared settings across train/dev/test set.
     - filename: A string, specifying the filename of the set.
-    - vocab: A hierarchical dict containing instances of the classes defined in "core.vocabulary.base". 
+    - vocab: A hierarchical dict containing instances of the classes defined in "occult.vocabulary.base". 
 
     - maxlen, minlen: A dict containing max/min numbers of words, characters, etc.  These kwargs are fed only to training set.
     '''

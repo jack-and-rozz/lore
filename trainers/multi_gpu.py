@@ -4,11 +4,11 @@ from pprint import pprint
 import numpy as np
 import tensorflow as tf
 from collections import defaultdict
-from core.utils import tf_utils
-from core.utils.common import dbgprint, dotDict, flatten_recdict
-from core.trainers.base import TrainerBase, average_gradients
-from core.models.adversarial import TaskAdversarial
-import core.models
+from occult.utils import tf_utils
+from occult.utils.common import dbgprint, dotDict, flatten_recdict
+from occult.trainers.base import TrainerBase, average_gradients
+from occult.models.adversarial import TaskAdversarial
+import occult.models
 
 class MultiModelWrapper(object):
   def __init__(self, models):
@@ -136,7 +136,7 @@ class MultiGPUTrainer(TrainerBase):
       raise ValueError("%s can execute only one type of task." % (self.__class__.__name__))
     task_name = list(config.tasks.keys())[0]
     task_config =  list(config.tasks.values())[0]
-    model_tyoe = getattr(core.models, task_config.model_type)
+    model_tyoe = getattr(occult.models, task_config.model_type)
     num_gpus = len(tf_utils.get_available_gpus())
     if not num_gpus:
       with tf.variable_scope(task_name, reuse=tf.AUTO_REUSE) as scope:

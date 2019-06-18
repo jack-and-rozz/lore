@@ -2,9 +2,9 @@
 import os, time, re, sys, math
 from collections import defaultdict, OrderedDict, Counter
 from orderedset import OrderedSet
-from core.utils.common import colored, flatten, normalize_vector, timewatch, dbgprint
-from core.utils.tokenizer import load_sentencepiece
-from core.vocabulary.embeddings import initialize_word_embeddings, initialize_char_embeddings
+from occult.utils.common import colored, flatten, normalize_vector, timewatch, dbgprint
+from occult.utils.tokenizer import load_sentencepiece
+from occult.vocabulary.embeddings import initialize_word_embeddings, initialize_char_embeddings
 import numpy as np
 #from sklearn.preprocessing import normalize
 from nltk import word_tokenize

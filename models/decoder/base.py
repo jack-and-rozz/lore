@@ -7,10 +7,10 @@ from tensorflow.contrib.seq2seq import AttentionWrapper, TrainingHelper, BasicDe
 from tensorflow.contrib.rnn import LSTMStateTuple, MultiRNNCell
 from tensorflow.python.util import nest
 
-from core.utils.tf_utils import shape, linear, make_summary, SharedKernelDense
-from core.utils.common import dbgprint, recDotDefaultDict, flatten, flatten_recdict, flatten_batch, dotDict
-from core.models.base import setup_cell, initialize_embeddings
-from core.vocabulary.base import PAD_ID
+from occult.utils.tf_utils import shape, linear, make_summary, SharedKernelDense
+from occult.utils.common import dbgprint, recDotDefaultDict, flatten, flatten_recdict, flatten_batch, dotDict
+from occult.models.base import setup_cell, initialize_embeddings
+from occult.vocabulary.base import PAD_ID
 
 
 def get_state_shape(state):

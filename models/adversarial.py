@@ -2,10 +2,10 @@
 import math, time, sys
 import tensorflow as tf
 from tensorflow.python.framework import ops
-from core.models.base import ModelBase, TestModelBase
-from core.trainers.base import average_gradients
-from core.utils.tf_utils import linear, shape, assign_device
-from core.utils.common import dbgprint
+from occult.models.base import ModelBase, TestModelBase
+from occult.trainers.base import average_gradients
+from occult.utils.tf_utils import linear, shape, assign_device
+from occult.utils.common import dbgprint
 
 class FlipGradientBuilder(object):
   def __init__(self):
