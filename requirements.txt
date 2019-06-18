@@ -1,0 +1,3 @@
+pyhocon
+nltk
+tensorflow-gpu==1.13.1

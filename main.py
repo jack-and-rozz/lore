@@ -3,9 +3,10 @@ from logging import FileHandler
 from pprint import pprint
 from collections import OrderedDict, defaultdict
 import sys, os, random, argparse, re, time
-sys.path.append(os.getcwd())
 import numpy as np
 import tensorflow as tf
+sys.path.append(os.getcwd())
+
 
 from occult.utils.common import dbgprint, dotDict, recDotDict, recDotDefaultDict, flatten, flatten_batch, flatten_recdict, timewatch, str2bool, logManager, get_config, print_config
 import occult.dataset as data_libs
@@ -20,20 +21,6 @@ BEST_CHECKPOINT_NAME = 'model.ckpt.best'
 def get_logger(logfile_path=None):
   logger = logManager(handler=FileHandler(logfile_path)) if logfile_path else logManager()
   return logger
-
-
-def get_parser():
-  desc = ""
-  parser = argparse.ArgumentParser(description=desc)
-  parser.add_argument('model_root_path', type=str, help ='')
-  parser.add_argument('mode', type=str, help ='')
-  parser.add_argument('-ct','--config_type', default='tmp', 
-                      type=str, help ='')
-  parser.add_argument('-cl', '--cleanup', default=False,
-                      type=str2bool, help ='')
-  parser.add_argument('--debug', default=False,
-                      type=str2bool, help ='')
-  return parser
 
 class ManagerBase(object):
   @timewatch()
@@ -81,7 +68,7 @@ class ManagerBase(object):
     if not os.path.exists(config_stored_path) or args.cleanup: #(args.cleanup and args.mode in ['train', 'debug']): 
       config_read_path = args.config_root
       config = get_config(config_read_path)[args.config_type]
-      sys.stderr.write("Store the specified config file %s(%s) to %s.\n" % (config_read_path, args.config_type, config_stored_path))
+      sys.stderr.write("Save the initial config file %s(%s) to %s.\n" % (config_read_path, args.config_type, config_stored_path))
       with open(config_stored_path, 'w') as f:
         sys.stdout = f
         print_config(config)
@@ -376,3 +363,46 @@ class ManagerBase(object):
       batches[task_name] = data
 
     return batches
+
+
+def main(args):
+  tf_config = tf.ConfigProto(
+    log_device_placement=False,
+    allow_soft_placement=True,
+    gpu_options=tf.GPUOptions(allow_growth=True)
+  )
+
+  with tf.Graph().as_default(), tf.Session(config=tf_config) as sess:
+    random.seed(0)
+    tf.set_random_seed(0)
+    manager = ExperimentManager(args, sess)
+    if args.mode == 'demo':
+      while True:
+        utterance = input('> ')
+        manager.demo([utterance])
+    else:
+      getattr(manager, args.mode)()
+
+
+def get_parser():
+  desc = ""
+  parser = argparse.ArgumentParser(description=desc)
+  parser.add_argument('model_root_path', type=str, help ='')
+  parser.add_argument('mode', type=str, help ='')
+  parser.add_argument('-ct','--config_type', default='tmp', 
+                      type=str, help ='')
+  parser.add_argument('-cl', '--cleanup', default=False,
+                      action='store_true', help ='')
+  parser.add_argument('--debug', default=False,
+                      action='store_true', help ='')
+  return parser
+
+if __name__ == "__main__":
+  # Common arguments are defined in base.py
+  parser = get_parser()
+  parser.add_argument('-cr','--config_root', 
+                      default='occult/configs/main.conf', 
+                      help='')
+
+  args = parser.parse_args()
+  main(args)
