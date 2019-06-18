@@ -36,7 +36,7 @@ def get_state_shape(state):
 def _setup_decoder_cell(config, keep_prob):
   return [setup_cell(
       config.cell_type,
-      config.rnn_size, 
+      config.hidden_size, 
       config.use_residual,
       keep_prob
     ) for _ in range(config.num_layers)]
@@ -78,14 +78,14 @@ class DecoderBase(object):
       train_cell, init_state = self.setup_decoder_cell(
         self.config, self.keep_prob, False, init_state, *attention_args)
 
-      self.input_project = tf.layers.Dense(units=self.config.rnn_size, 
+      self.input_project = tf.layers.Dense(units=self.config.hidden_size, 
                                            name="input_projection",
                                            activation=self.activation)
 
       if hasattr(self.config, 'use_emb_as_out_proj') and \
          self.config.use_emb_as_out_proj == True:
-        # Make the dim of decoder's output be rnn_size to emb_size.
-        emb_project = tf.layers.Dense(units=self.config.rnn_size, 
+        # Make the dim of decoder's output be hidden_size to emb_size.
+        emb_project = tf.layers.Dense(units=self.config.hidden_size, 
                                       use_bias=False,
                                       activation=None,
                                       name='emb_projection')
@@ -225,7 +225,7 @@ class AttentionDecoder(DecoderBase):
       # define cell input function to keep input/output dimension same
       if not config.use_attention_input_feeding:
         return inputs
-      attn_project = tf.layers.Dense(config.rnn_size, dtype=tf.float32, 
+      attn_project = tf.layers.Dense(config.hidden_size, dtype=tf.float32, 
                                      name='attn_input_feeding',
                                      activation=self.activation)
       return attn_project(tf.concat([inputs, attention], axis=-1))
@@ -234,7 +234,7 @@ class AttentionDecoder(DecoderBase):
     if config.top_attention:  # apply attention mechanism only on the top decoder layer
       cells[-1] = AttentionWrapper(cells[-1], attention_mechanism=attention, 
                                    name="AttentionWrapper",
-                                   attention_layer_size=config.rnn_size, 
+                                   attention_layer_size=config.hidden_size, 
                                    alignment_history=use_beam_search,
                                    initial_cell_state=init_state[-1],
                                    cell_input_fn=cell_input_fn)
@@ -247,7 +247,7 @@ class AttentionDecoder(DecoderBase):
       cells = MultiRNNCell(cells)
       cells = AttentionWrapper(cells, attention_mechanism=attention, 
                                name="AttentionWrapper",
-                               attention_layer_size=config.rnn_size, 
+                               attention_layer_size=config.hidden_size, 
                                alignment_history=use_beam_search,
                                initial_cell_state=init_state,
                                cell_input_fn=cell_input_fn)

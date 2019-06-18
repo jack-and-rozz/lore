@@ -71,14 +71,14 @@ def reshape_state(state, other_shapes):
 
 
 
-def setup_rnn(inputs, sequence_length, cell_type, rnn_size, 
+def setup_rnn(inputs, sequence_length, cell_type, hidden_size, 
               use_residual, keep_prob, num_layers):
   with tf.name_scope(sys._getframe().f_code.co_name):
 
     cells = tf.contrib.rnn.MultiRNNCell([
       setup_cell(
         cell_type,
-        rnn_size, 
+        hidden_size, 
         use_residual,
         keep_prob,
       ) for _ in range(num_layers)]) 
@@ -87,19 +87,19 @@ def setup_rnn(inputs, sequence_length, cell_type, rnn_size,
       sequence_length=sequence_length, dtype=tf.float32)
     return outputs, state
 
-def setup_birnn(inputs, sequence_length, cell_type, rnn_size, 
+def setup_birnn(inputs, sequence_length, cell_type, hidden_size, 
                 use_residual, keep_prob):
   with tf.name_scope(sys._getframe().f_code.co_name):
     batch_size = shape(inputs, 0)
     # For 'initial_state' of CustomLSTMCell, different scopes are required in these initializations.
     with tf.variable_scope('fw_cell'):
-      cell_fw = setup_cell(cell_type, rnn_size,
+      cell_fw = setup_cell(cell_type, hidden_size,
                            use_residual,
                            keep_prob=keep_prob)
       initial_state_fw = cell_fw.initial_state(batch_size) if hasattr(cell_fw, 'initial_state') else None
 
     with tf.variable_scope('bw_cell'):
-      cell_bw = setup_cell(cell_type, rnn_size,
+      cell_bw = setup_cell(cell_type, hidden_size,
                            use_residual,
                            keep_prob=keep_prob)
       initial_state_bw = cell_bw.initial_state(batch_size) if hasattr(cell_bw, 'initial_state') else None
@@ -225,8 +225,8 @@ class SentenceEncoder(object):
 
       inputs = flattened_sent_repls
 
-      # Project input before the main RNN, to keep the dims of inputs equal to rnn_size in both cases of using birnn or not.
-      input_project = tf.layers.Dense(units=self.config.rnn_size, 
+      # Project input before the main RNN, to keep the dims of inputs equal to hidden_size in both cases of using birnn or not.
+      input_project = tf.layers.Dense(units=self.config.hidden_size, 
                                       dtype=tf.float32,
                                       name="input_projection",
                                       activation=self.activation)
@@ -239,15 +239,15 @@ class SentenceEncoder(object):
           with tf.variable_scope('BiRNN/L%d' % i):
             use_residual = self.config.use_residual if i > 0 else False
             outputs, state = setup_birnn(inputs, flattened_sequence_length, 
-                                         config.cell_type, config.rnn_size, 
+                                         config.cell_type, config.hidden_size, 
                                          config.use_residual, self.keep_prob)
-            # Concat and project the outputs and the state from BiRNN to rnn_size.
+            # Concat and project the outputs and the state from BiRNN to hidden_size.
             state = merge_state(state, tf.concat)
-            state = project_state(state, self.config.rnn_size)
+            state = project_state(state, self.config.hidden_size)
             birnn_state.append(state)
 
             outputs = tf.concat(outputs, axis=-1)
-            output_project = tf.layers.Dense(units=self.config.rnn_size, 
+            output_project = tf.layers.Dense(units=self.config.hidden_size, 
                                              dtype=tf.float32,
                                              name="output_projection",
                                              activation=self.activation)
@@ -263,7 +263,7 @@ class SentenceEncoder(object):
           #   cells, inputs, 
           #   sequence_length=flattened_sequence_length, dtype=tf.float32)
           outputs, rnn_state = setup_rnn(inputs, flattened_sequence_length, 
-                                         config.cell_type, config.rnn_size, 
+                                         config.cell_type, config.hidden_size, 
                                          config.use_residual, self.keep_prob, 
                                          config.num_layers.rnn)
 
