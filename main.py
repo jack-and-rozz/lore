@@ -15,7 +15,7 @@ import occult.trainers as trainer_libs
 
 random.seed(0)
 np.random.seed(0)
-
+exit(1)
 
 BEST_CHECKPOINT_NAME = 'model.ckpt.best'
 def get_logger(logfile_path=None):
